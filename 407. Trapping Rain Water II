@@ -4,9 +4,8 @@ int qn = 0;
 int alt;
 int volume (int *max1, int *max2, int fui[*max1][*max2], int i, int j, int **vet){
     cont += alt - vet[i][j];
-    if(ver == 1 || (i == 1 && vet[i-1][j] <= vet[i][j] && vet[i-1][j] <= alt) || (j == 1 && vet[i][j-1] <= vet[i][j] && vet[i][j-1] <= alt) || (i == (*max1)-2 && vet[i+1][j] <= vet[i][j] && vet[i+1][j] <= alt) || (j == (*max2)-2 && vet[i][j+1] <= vet[i][j] && vet[i][j+1] <= alt)){
-        printf("-%d -",i == 1 && vet[i-1][j] <= vet[i][j]);
-        printf("-%d -",j == 1 && vet[i][j-1] <= vet[i][j]);
+    if(ver == 1 || (i == 1 && vet[i-1][j] <= vet[i][j]) || (j == 1 && vet[i][j-1] <= vet[i][j]) || (i == (*max1)-2 && vet[i+1][j] <= vet[i][j]) || (j == (*max2)-2 && vet[i][j+1] <= vet[i][j] )){
+
         ver = 1;
         return 0;
     }
@@ -20,23 +19,22 @@ int volume (int *max1, int *max2, int fui[*max1][*max2], int i, int j, int **vet
     }
     printf("\n");
     if(fui[i][j+1] != -1 && vet[i][j+1] < alt){
+        //printf("direita\n");
         volume(max1, max2, fui, i, j+1,vet);
-        printf("direita\n");
     }
     if(fui[i+1][j] != -1 && vet[i+1][j] < alt){
+        //printf("baixo\n");
         volume(max1, max2, fui, i+1, j, vet);
-        printf("baixo\n");
     }
     if(fui[i][j-1] != -1 && vet[i][j-1] < alt){
+        //printf("esquerda\n");
         volume(max1, max2, fui, i, j-1 ,vet);
-        printf("esquerda\n");
     }
     if(fui[i-1][j] != -1 && vet[i-1][j] < alt){
+        //printf("coma\n");
         volume(max1, max2, fui, i-1, j, vet);
-        printf("coma\n");
     }
     if(ver == 1){
-        printf("afaff");
         return 0;
     }
     return 1;
@@ -52,7 +50,7 @@ int trapRainWater(int** heightMap, int heightMapSize, int* heightMapColSize) {
     for(int i = 1; i<heightMapSize;i++ ){
         for(int j = 1; j <(*heightMapColSize); j++ ){
             if(fui[i][j] == 0 && heightMap[i][j] < heightMap[i-1][j] && heightMap[i][j] < heightMap[i][j-1]){
-                alt = heightMap[i-1][j] > heightMap[i][j-1] ? heightMap[i-1][j] : heightMap[i][j-1];
+                alt = heightMap[i-1][j] > heightMap[i][j-1] ? heightMap[i][j-1] : heightMap[i-1][j];
                 if(1 == volume(&heightMapSize, &(*heightMapColSize), fui, i, j, heightMap)){
                     vol+=cont;
                 }
