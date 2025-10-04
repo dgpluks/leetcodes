@@ -10,14 +10,28 @@ int volume (int *max1, int *max2, int fui[*max1][*max2], int i, int j, int **vet
         return 0;
     }
     qn++;
+    if(i == 1 && vet[i-1][j] < alt){
+        cont -= (alt- vet[i-1][j]) * qn;
+        alt = vet[i-1][j];
+    }else if (j == 1 && vet[i][j-1] < alt){
+        cont -= (alt- vet[i][j-1]) * qn;
+        alt = vet[i][j-1];
+    }else if (i == (*max1)-2 && vet[i+1][j] < alt){
+        cont -= (alt- vet[i+1][j]) * qn;
+        alt = vet[i+1][j];
+    }else if (j == (*max2)-2 && vet[i][j+1] < alt ){
+        cont -= (alt- vet[i][j+1]) * qn;
+        alt = vet[i][j+1];
+    }
     fui[i][j] = -1;
-    for(int i = 0; i<*max1;i++ ){
+    /*for(int i = 0; i<*max1;i++ ){
         for(int j = 0; j <*max2; j++ ){
             printf("%d ", fui[i][j]*-1);
         }
         printf("\n");
     }
     printf("\n");
+    */
     if(fui[i][j+1] != -1 && vet[i][j+1] < alt){
         //printf("direita\n");
         volume(max1, max2, fui, i, j+1,vet);
@@ -31,8 +45,11 @@ int volume (int *max1, int *max2, int fui[*max1][*max2], int i, int j, int **vet
         volume(max1, max2, fui, i, j-1 ,vet);
     }
     if(fui[i-1][j] != -1 && vet[i-1][j] < alt){
-        //printf("coma\n");
+        //printf("cima\n");
         volume(max1, max2, fui, i-1, j, vet);
+    }
+    if(vet[i][j] > alt){
+        cont += (vet[i][j]-alt);
     }
     if(ver == 1){
         return 0;
@@ -47,8 +64,8 @@ int trapRainWater(int** heightMap, int heightMapSize, int* heightMapColSize) {
             fui[i][j]= 0;
         }
     }
-    for(int i = 1; i<heightMapSize;i++ ){
-        for(int j = 1; j <(*heightMapColSize); j++ ){
+    for(int i = 1; i<heightMapSize-1;i++ ){
+        for(int j = 1; j <(*heightMapColSize)-1; j++ ){
             if(fui[i][j] == 0 && heightMap[i][j] < heightMap[i-1][j] && heightMap[i][j] < heightMap[i][j-1]){
                 alt = heightMap[i-1][j] > heightMap[i][j-1] ? heightMap[i][j-1] : heightMap[i-1][j];
                 if(1 == volume(&heightMapSize, &(*heightMapColSize), fui, i, j, heightMap)){
